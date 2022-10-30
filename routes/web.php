@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,16 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
+    Route::get('/product/view', [ProductController::class, 'View']);
+    Route::get('/product/add', [ProductController::class, 'Create']);
+     Route::post('/product/store', [ProductController::class, 'Store']);
+    Route::get('/product/delete/{id}', [ProductController::class, 'Delete']);
+    Route::get('/subcat/filter/{sub_cat_id}', [ProductController::class, 'SubcatFilter']);
+    Route::get('/cat/filter/{cat_id}', [ProductController::class, 'CatFilter']);
+    Route::get('/product/filter/{product_id}', [ProductController::class, 'ProductFilter']);
+});
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
